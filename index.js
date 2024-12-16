@@ -1,9 +1,20 @@
 // script.js
 const board = document.getElementById('board');
 const resetButton = document.getElementById('reset');
+const scoreX = document.getElementById('score-x-count');
+const scoreO = document.getElementById('score-o-count');
+
+// music
+const gameOver = new Audio("music-sound/game-over.mp3");
+const select = new Audio("music-sound/select-sound.mp3");
+const backgroundMusic = new Audio("music-sound/background-music.mp3");
+backgroundMusic.loop = true;
+
+
 let currentPlayer = 'X';
 let gameBoard = ['', '', '', '', '', '', '', '', '']; // Tracks the board state
 let gameActive = true;
+let score = {X: 0, O: 0}; // store scores for X and O
 
 // Function to create the Tic-Tac-Toe grid
 function createBoard() {
@@ -27,16 +38,30 @@ function handleCellClick(event) {
     gameBoard[cellIndex] = currentPlayer;
     event.target.innerText = currentPlayer;
 
+    backgroundMusic.play(); // background music
+    select.play();  // play select sound
+
     // Check for a winner
     if (checkWinner()) {
-        setTimeout(() => alert(`${currentPlayer} wins!`), 100);
+        score[currentPlayer]++; // Increment score for the current player
+        updateScoreDisplay(); // Update the score display
+
+        setTimeout(() => {
+            backgroundMusic.pause(); // stops the background music
+            gameOver.play(); // Play game over sound
+            alert(`${currentPlayer} wins!`);
+        }, 100);
         gameActive = false;
         return;
     }
 
     // Check for a draw
     if (gameBoard.every(cell => cell)) {
-        setTimeout(() => alert('It\'s a draw!'), 100);
+        setTimeout(() => {
+            backgroundMusic.pause(); // stops the background music
+            gameOver.play();
+            alert("It's a draw");
+        }, 100);
         gameActive = false;
         return;
     }
@@ -66,6 +91,12 @@ function checkWinner() {
     }
 
     return false;
+}
+
+// Function to update the score display
+function updateScoreDisplay() {
+    scoreX.textContent = score.X;
+    scoreO.textContent = score.O;
 }
 
 // Function to reset the game

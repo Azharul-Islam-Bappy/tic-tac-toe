@@ -23,6 +23,16 @@ h1 {
     margin-bottom: 20px;
 }
 
+.scoreboard{
+    margin-bottom: 20px;
+    font-size: 1.2rem;
+}
+
+.scoreboard div{
+    display: inline-block;
+    margin: 0 10px;
+}
+
 .board {
     display: grid;
     grid-template-columns: repeat(3, 100px);
